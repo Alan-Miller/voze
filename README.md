@@ -27,7 +27,7 @@
 
 ## To-do
 1. Add README instructions
-1. Add README notes about decisions
+1. Add README notes about assumptions and decisions
 1. Flag sentence-starters w/o improper spellings
 1. Consider flagging capped words in-sentence w/o improper spellings
 1. Only capture maybe proper nouns w/o improper spellings (starters)
@@ -40,3 +40,13 @@
 1. Command line
 1. Tests
 1. Re-check all requirements
+
+
+## Questions
+
+1. JAR file better?
+1. tests? Junit?
+1. conventions? advice? problems?
+1. context?
+1. H Include package?
+1. H Organize files?

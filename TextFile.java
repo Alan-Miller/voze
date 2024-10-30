@@ -39,7 +39,7 @@ public class TextFile {
                         String misspelling = """
                                 Misspelled "%s" (line %s, col %s). Suggestions: %s
                                 """
-                                .formatted(word, lineNumber, columnNumber, Dictionary.suggestSpellings(word));
+                                .formatted(word, lineNumber, columnNumber, Dictionary.suggestFor(word));
 
                         System.out.println(misspelling);
                     }

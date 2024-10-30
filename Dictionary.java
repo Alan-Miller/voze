@@ -34,7 +34,7 @@ public class Dictionary {
         return dictHashSet;
     }
 
-    public static String suggestSpellings(String misspelledString) {
+    public static String suggestFor(String misspelledString) {
         Set<String> dictionary = get();
 
         Map<String, Float> suggestions = new LinkedHashMap<String, Float>();
