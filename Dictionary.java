@@ -14,7 +14,7 @@ public class Dictionary {
             String line;
 
             while ((line = br.readLine()) != null) {
-                String[] wordsInDictLine = line.split("[^a-zA-Z0-9]");
+                String[] wordsInDictLine = line.split("[^a-zA-Z0-9']");
                 int i;
 
                 for (i = 0; i < wordsInDictLine.length; i++) {

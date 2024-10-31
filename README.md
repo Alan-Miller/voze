@@ -32,7 +32,7 @@
 
 The word suggestions requirement presented one of the most interesting problems. Solutions I considered:
 
-#### _1. Use Elixir's out-of-the-box string comparision tools_
+#### _1. Use Elixir's out-of-the-box string comparison tools_
 
 ```elixir
 iex> String.jaro_distance("easy", "peasy")
@@ -43,11 +43,11 @@ iex> String.jaro_distance("lemon", "squeezy")
 ```
 
 Elixir is a language I've worked in for years, and its `String` type has a built-in function for computing the similarity between strings, outputting a number between 0 (complete mismatch) and 1 (exact match). This would have provided an easy solution for word suggestions.
-Ultimately, I didn't think an Elixir app like this would leave us with as much to talk about. The language itself and its functional nature might be less relevent to Voze, and Elixir's `String.jaro_distance` function would do a lot of the heavy lifting, leaving less for me to do. I decided to write the app in Java (and get those sweet extra credit points).
+Ultimately, I didn't think an Elixir app like this would leave us with as much to talk about. The language itself and its functional nature might be less relevant to Voze, and Elixir's `String.jaro_distance` function would do a lot of the heavy lifting, leaving less for me to do. I decided to write the app in Java (and get those sweet extra credit points).
 
 #### _2. Third-party Java packages_
 
-There are several different algorithms for calculating similarity between strings. I considered simply finding some lightweight Java packages to do the job, even considering multiple packages based on their algorithms' different strengths. In a real-worl scenario, I would seriously consider this approach. No need to solve a problem someone else already invested a lot of effort into solving and wrapping up in a nice, lightweight package. And installing multiple packages would let our team consider some A/B testing to see which package provided the best word suggestions. In a code challenge situation however, I thought writing the code myself would create more opportunities for discussion.
+There are several different algorithms for calculating similarity between strings. I considered simply finding some lightweight Java packages to do the job, even considering multiple packages based on their algorithms' different strengths. In a real-world scenario, I would seriously consider this approach. No need to solve a problem someone else already invested a lot of effort into solving and wrapping up in a nice, lightweight package. And installing multiple packages would let our team consider some A/B testing to see which package provided the best word suggestions. In a code challenge situation however, I thought writing the code myself would create more opportunities for discussion.
 
 #### _3. Write a Jaro Score algorithm myself in Java_
 
@@ -78,7 +78,7 @@ I assumed the text file to check would include natural (but sometimes misspelled
 
 #### _Addressing edge cases_
 
-The "Misspellings" section of the output outputs any lowercase word with no exact dictionary match, assuming it must be misspelled. The "Possible Misspellings" section displays words that are capitalized at the start of sentences and do not have an exact dictionary match. It ignores capitalized words mid-sentence, assuming they are correctly capitalized proper nouns (which we probably cannot verify with our given toolset), and it ignores sentence-starting words that _do_ have dictionary matches, assuming they are either non-proper nouns or at least correctly spelled proper nouns. But without an exhaustive lookup file of proper nouns, the choice seems to be between:
+The "Misspellings" section of the output outputs any lowercase word with no exact dictionary match, assuming it must be misspelled. The "Possible Misspellings" section displays words that are capitalized at the start of sentences and do not have an exact dictionary match. It ignores capitalized words mid-sentence, assuming they are correctly capitalized proper nouns (which we probably cannot verify with our given tool set), and it ignores sentence-starting words that _do_ have dictionary matches, assuming they are either non-proper nouns or at least correctly spelled proper nouns. But without an exhaustive lookup file of proper nouns, the choice seems to be between:
 
 - _Ignoring_ mid-sentence capitalized words not in the dictionary, assuming they are properly spelled proper nouns,
 - _Flagging_ mid-sentence capitalized words not in the dictionary, assuming they are misspelled
@@ -88,3 +88,7 @@ I decided to err on the side of not overwhelming the user with a ton of false po
 - Mid-sentence capitalized words are assumed to be _correctly_ spelled proper nouns regardless of whether they have an exact dictionary match
 - Sentence-starting words are assumed to be _incorrectly_ spelled 
 
+## Final Notes
+
+- This README has been spell-checked with the Voze Spell Checker
+- Thank you for considering me  :)
