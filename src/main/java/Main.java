@@ -8,7 +8,7 @@ public class Main {
             textFile.spellCheck();
         } else {
             System.out.println(
-                    "Usage: java Main.java <dictionary_file_path> <file_to_check_path> <OPTIONALLY_CHOOSE_ONE_FLAG:-jw -natural>");
+                    "Usage: java Main.java <dictionary_file_path> <file_to_check_path>");
         }
 
     }

@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.Error;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +11,10 @@ public class TextFile {
     private Dictionary dictionary;
 
     public TextFile(String textFilePath, Dictionary dictionary) {
+        if (dictionary.entries.isEmpty()) {
+            throw new Error("No dictionary found!");
+        }
+
         this.textFilePath = textFilePath;
         this.dictionary = dictionary;
     }
@@ -87,7 +92,8 @@ public class TextFile {
                                 "%s" (line %s, col %s)""".formatted(word, lineNumber, columnNumber));
                     }
 
-                    // Removing the word ensures the next identical misspelling has the correct index
+                    // Removing the word ensures the next identical misspelling has the correct
+                    // index
                     lineCopy = lineCopy.replaceFirst(word, "*".repeat(word.length()));
                 }
 

@@ -23,8 +23,10 @@
 1. To run the app with the the supplied text file, run the command below as-is in the command line. Or, to use a different text file, replace `./file-to-check.txt` with the path to a different .txt file.
 
     ```shell
-    java Main.java ./dictionary.txt ./file-to-check.txt
+    java src/main/java/Main.java ./dictionary.txt ./file-to-check.txt
     ```
+
+1. Optionally, run the unit tests found in `src/test/java` in a text editor.
 
 ## Decisions I made
 
