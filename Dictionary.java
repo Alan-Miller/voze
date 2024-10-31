@@ -1,18 +1,15 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.Error;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class Dictionary {
-    public static void create(String dictionaryFilePath) {
-        if (dictionaryFilePath == null) {
-            throw new Error("Must provide dictionary file path");
-        }
+    public Set<String> entries = new HashSet<String>();
 
+    public Dictionary(String dictionaryFilePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(dictionaryFilePath))) {
             String line;
 
@@ -21,7 +18,7 @@ public class Dictionary {
                 int i;
 
                 for (i = 0; i < wordsInDictLine.length; i++) {
-                    dictHashSet.add(wordsInDictLine[i]);
+                    entries.add(wordsInDictLine[i]);
                 }
             }
 
@@ -30,12 +27,8 @@ public class Dictionary {
         }
     }
 
-    public static Set<String> get() {
-        return dictHashSet;
-    }
-
-    public static String suggestFor(String misspelledString) {
-        Set<String> dictionary = get();
+    public String suggestFor(String misspelledString) {
+        Set<String> dictionary = entries;
 
         Map<String, Float> suggestions = new LinkedHashMap<String, Float>();
         suggestions.put(" ", -1.00f);
@@ -49,10 +42,11 @@ public class Dictionary {
 
             String prevSuggestion = suggestions.keySet().iterator().next();
             Float prevJaroScore = suggestions.values().iterator().next();
-            Float jaroScore = Jaro.calc(misspelledString, word);
+            Float jaroScore = new Jaro().calc(misspelledString, word);
 
             if (jaroScore > prevJaroScore && jaroScore > 0.75f) {
                 suggestions.put(word, jaroScore);
+
                 if (suggestions.size() >= 4 || prevSuggestion == " ") {
                     suggestions.remove(prevSuggestion);
                 }
@@ -69,8 +63,4 @@ public class Dictionary {
         Set<String> rankedSuggestions = reversedMap.keySet();
         return "%s".formatted(rankedSuggestions);
     }
-
-    // PRIVATE
-
-    private static Set<String> dictHashSet = new HashSet<String>();
 }

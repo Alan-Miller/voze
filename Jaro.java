@@ -2,41 +2,19 @@ import java.lang.Math;
 import java.util.ArrayList;
 
 public class Jaro {
+    private String textWord;
+    private String dictWord;
+    private ArrayList<Character> textMatches = new ArrayList<Character>();
+    private ArrayList<Character> dictMatches = new ArrayList<Character>();
+    private int numTranspositions = 0;
+    private float jaroScore;
 
-    public static Float calc(String textString, String dictString) {
-        textWord = textString;
-        dictWord = dictString;
-
-        findMatches();
-        if (textMatches.size() == 0) {
-            return 0.0f;
-        }
-
-        calcTranspositions();
-        calcScore();
-
-        // Clear values for next use
-        textMatches.clear();
-        dictMatches.clear();
-        numTranspositions = 0;
-
-        return jaroScore;
-    }
-
-    // PRIVATE
-
-    private static String textWord;
-    private static String dictWord;
-    private static ArrayList<Character> textMatches = new ArrayList<Character>();
-    private static ArrayList<Character> dictMatches = new ArrayList<Character>();
-    private static int numTranspositions = 0;
-    private static float jaroScore;
-
-    private static void findMatches() {
+    private void findMatches() {
         int textLen = textWord.length();
         int dictLen = dictWord.length();
 
         // Maximum allowed change is half the longest length, rounded down, plus 1
+        // Any character farther away is not considered a match on the compared word
         int maxDelta = (int) (Math.floor((Math.max(textLen, dictLen) / 2))) + 1;
 
         // Remaining unmatched chars, used to prevent double-counting matches
@@ -68,7 +46,7 @@ public class Jaro {
             }
         }
 
-        // Remove null values, used in calcTranspositions to compare chars
+        // Remove null values; remaining chars compared in calcTranspositions
         for (char ch : matchingTextChars) {
             if (ch != '\u0000') {
                 textMatches.add(ch);
@@ -79,11 +57,9 @@ public class Jaro {
                 dictMatches.add(ch);
             }
         }
-
-        // Total number of matches, used in calcScore
     }
 
-    private static void calcTranspositions() {
+    private void calcTranspositions() {
         for (char i = 0; i < textMatches.size(); i++) {
             if (textMatches.get(i) != dictMatches.get(i)) {
                 numTranspositions++;
@@ -91,7 +67,7 @@ public class Jaro {
         }
     }
 
-    private static void calcScore() {
+    private void calcScore() {
         int m = 0;
         int s1 = textWord.length();
         int s2 = dictWord.length();
@@ -103,10 +79,28 @@ public class Jaro {
             }
         }
 
-        // Jaro Score formula
+        // JARO SCORE FORMULA
         // 1/3 * (m/s1 + m/s2 + (m-(t/2))/m)
-        // where s1 is length1, s2 is length2, m is # matches, and t is # transpositions
-        jaroScore = 1.0f / 3.0f *
-                (((float) m / (float) s1) + ((float) m / (float) s2) + (((float) m - (float) t / 2.0f) / (float) m));
+        // Where s1 is length1, s2 is length2, m is # matches, and t is # transpositions
+        jaroScore = 1.0f / 3.0f
+                * (((float) m / (float) s1) + ((float) m / (float) s2) + (((float) m - (float) t / 2.0f) / (float) m));
+    }
+
+    // PUBLIC
+
+    public Float calc(String textWord, String dictWord) {
+        this.textWord = textWord;
+        this.dictWord = dictWord;
+
+        findMatches();
+        // If no matches found, exit early with a zero score
+        if (textMatches.size() == 0) {
+            return 0.0f;
+        }
+
+        calcTranspositions();
+        calcScore();
+
+        return jaroScore;
     }
 }
