@@ -112,7 +112,7 @@ public class TextFile {
             // Possible Misspellings
             if (properNouns.size() > 0) {
                 System.out.println(
-                        "\nPOSSIBLE MISSPELLINGS (may be proper nouns at start of sentence or section)\n");
+                        "\nPOSSIBLE MISSPELLINGS (may be proper nouns at start of sentence)\n");
 
                 for (String properNounMessage : properNouns) {
                     System.out.println(properNounMessage);
