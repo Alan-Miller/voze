@@ -2,7 +2,7 @@
 
 ## Instructions
 
-1. In a shell terminal, use `cd` to drill into a directory where you wish to clone the repo
+1. In a shell terminal, `cd` into a directory where you wish to clone the repo, for example:
 
     ```shell
     cd code/java/
@@ -11,13 +11,13 @@
 1. Clone the repo
 
     ```shell
-    git clone git@github.com:Alan-Miller/Voze.git
+    git clone git@github.com:Alan-Miller/voze.git
     ```
 
-1. `cd` into the Voze folder
+1. `cd` into the `voze` folder
 
     ```shell
-    cd Voze/
+    cd voze/
     ```
 
 1. To run the app with the the supplied text file, run the command below as-is in the command line. Or, to use a different text file, replace `./file-to-check.txt` with the path to a different .txt file.
