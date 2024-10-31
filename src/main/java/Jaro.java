@@ -14,7 +14,7 @@ public class Jaro {
         int dictLen = dictWord.length();
 
         // Maximum allowed change is half the longest length, rounded down, plus 1
-        // Any character farther away is not considered a match on the compared word
+        // Any character farther away is not considered a match for the compared word
         int maxDelta = (int) (Math.floor((Math.max(textLen, dictLen) / 2))) + 1;
 
         // Remaining unmatched chars, used to prevent double-counting matches
@@ -72,6 +72,7 @@ public class Jaro {
         int s1 = textWord.length();
         int s2 = dictWord.length();
         int t = numTranspositions;
+        // Where s1 is length1, s2 is length2, m is # matches, and t is # transpositions
 
         for (char ch : textMatches) {
             if (ch != '\u0000') {
@@ -81,7 +82,6 @@ public class Jaro {
 
         // JARO SCORE FORMULA
         // 1/3 * (m/s1 + m/s2 + (m-(t/2))/m)
-        // Where s1 is length1, s2 is length2, m is # matches, and t is # transpositions
         jaroScore = 1.0f / 3.0f
                 * (((float) m / (float) s1) + ((float) m / (float) s2) + (((float) m - (float) t / 2.0f) / (float) m));
     }

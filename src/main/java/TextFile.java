@@ -31,33 +31,32 @@ public class TextFile {
             int lineNumber = 1;
 
             while ((line = br.readLine()) != null) {
-                // Skip empty/extra lines
+                // Skip blank lines
                 if (line.length() == 0) {
                     lineNumber++;
                     continue;
                 }
 
-                // Line copy to aid in finding indexes of multiple same misspellings
+                // Line copy to help find all indexes when there are multiple same misspellings
                 lineCopy = line;
-
                 String[] wordsInTextLine = line.split("[^a-zA-Z0-9']");
-                int i;
 
+                int i;
                 for (i = 0; i < wordsInTextLine.length; i++) {
                     String word = wordsInTextLine[i];
                     int columnNumber = lineCopy.indexOf(word) + 1;
 
-                    // Catch certain contractions, checking if an acceptable root word can be found
+                    // Catch common contractions, checking if an acceptable root word can be found
                     String normalizedWord = word.toLowerCase().replaceAll("'s|n't|'t|'ll|'ve|'re|'d|'m|'", "");
 
                     // Ignore easy proper nouns that often appear at start of sentence
-                    // These exceptions represent a place where the dictionary could be supplemented
-                    String[] exceptions = { "I", "I'm", "I've", "I'll", "I'd", "non", "pre", "post" };
+                    // Note: Here our dictionary could be supplemented with proper nouns, prefixes
+                    String[] supplementalEntries = { "I", "I'm", "I've", "I'll", "I'd", "non", "pre", "post" };
 
-                    // Ignore numbers, exceptions, and words with exact dictionary matches
+                    // Ignore numbers, supplemental entries, words with correct dictionary spelling
                     boolean wordIsMisspelled = word != ""
                             && !word.matches("-?\\d+(\\.\\d+)?")
-                            && !(Arrays.asList(exceptions)).contains(word)
+                            && !(Arrays.asList(supplementalEntries)).contains(word)
                             && !dictionary.entries.contains(normalizedWord);
 
                     boolean wordIsCapitalized = word != "" && Character.isUpperCase(word.charAt(0));
@@ -67,7 +66,7 @@ public class TextFile {
                             && (i == 0 || line.charAt(lineCopy.indexOf(word) - 2) == '.');
 
                     if (wordIsMisspelled && !wordIsCapitalized) {
-                        // Determines how "wide" a net to try to cast for surrounding context.
+                        // Determines how "wide a net" to cast for surrounding context
                         int edgeChars = 16;
                         int startIndex = lineCopy.indexOf(word) - edgeChars >= 0 ? lineCopy.indexOf(word) - edgeChars
                                 : 0;
@@ -75,7 +74,7 @@ public class TextFile {
                                 ? lineCopy.indexOf(word) + word.length() + edgeChars
                                 : line.length() - 1;
 
-                        // Creates substring, removes incomplete words, adds ellipses
+                        // Creates context substring, removes incomplete words, adds ellipses
                         String context = line.substring(startIndex, endIndex)
                                 .replaceAll("^.*?\\s", "")
                                 .replaceAll("\\s[^\\s]*$", "")
@@ -92,8 +91,7 @@ public class TextFile {
                                 "%s" (line %s, col %s)""".formatted(word, lineNumber, columnNumber));
                     }
 
-                    // Removing the word ensures the next identical misspelling has the correct
-                    // index
+                    // Removing the word ensures the next identical misspelling has correct index
                     lineCopy = lineCopy.replaceFirst(word, "*".repeat(word.length()));
                 }
 
@@ -119,7 +117,7 @@ public class TextFile {
                 }
             }
 
-            // No misspellings
+            // No misspellings!
             if (misspelledWords.size() == 0 && properNouns.size() == 0) {
                 System.out.println("No misspelled words!");
             }

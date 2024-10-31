@@ -28,12 +28,11 @@ public class Dictionary {
     }
 
     public String suggestFor(String misspelledString) {
-        Set<String> dictionary = entries;
-
         Map<String, Float> suggestions = new LinkedHashMap<String, Float>();
         suggestions.put(" ", -1.00f);
 
-        for (String word : dictionary) {
+        // Sort current set of suggestions for comparison
+        for (String word : entries) {
             suggestions = suggestions.entrySet()
                     .stream()
                     .sorted(Map.Entry.comparingByValue())
@@ -43,8 +42,10 @@ public class Dictionary {
             String prevSuggestion = suggestions.keySet().iterator().next();
             Float prevJaroScore = suggestions.values().iterator().next();
             Float jaroScore = new Jaro().calc(misspelledString, word);
+            // This number is a minimum score intended to prevent low-quality matches
+            Float minimumScore = 0.75f;
 
-            if (jaroScore > prevJaroScore && jaroScore > 0.75f) {
+            if (jaroScore > prevJaroScore && jaroScore > minimumScore) {
                 suggestions.put(word, jaroScore);
 
                 if (suggestions.size() >= 4 || prevSuggestion == " ") {
@@ -53,6 +54,7 @@ public class Dictionary {
             }
         }
 
+        // Reverse suggestions to display best suggestion first
         Map<String, Float> reversedMap = suggestions.entrySet()
                 .stream()
                 .sorted(Map.Entry.<String, Float>comparingByValue().reversed())

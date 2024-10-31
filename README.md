@@ -2,8 +2,12 @@
 
 ## Instructions
 
-1. In a shell terminal, `cd` into a directory where you wish to clone the repo, for example:
+1. In a shell terminal, `cd` into a directory where you wish to clone the repo. Examples:
 
+    ```shell
+    cd ~/Desktop/
+    ```
+    OR
     ```shell
     cd code/java/
     ```
@@ -30,7 +34,7 @@
 
 ## Decisions I made
 
-### Choice of language and the Jaro algorithm
+### Choice of language and algorithm
 
 The word suggestions requirement presented one of the most interesting problems. Solutions I considered:
 
@@ -49,7 +53,7 @@ Ultimately, I didn't think an Elixir app like this would leave us with as much t
 
 #### _2. Third-party Java packages_
 
-There are several different algorithms for calculating similarity between strings. I considered simply finding some lightweight Java packages to do the job, even considering multiple packages based on their algorithms' different strengths. In a real-world scenario, I would seriously consider this approach. No need to solve a problem someone else already invested a lot of effort into solving and wrapping up in a nice, lightweight package. And installing multiple packages would let our team consider some A/B testing to see which package provided the best word suggestions. In a code challenge situation however, I thought writing the code myself would create more opportunities for discussion.
+There are several different algorithms for calculating similarity between strings. I considered simply finding some lightweight Java packages to do the job, considering multiple packages based on their algorithms' different strengths. In a real-world scenario, I would seriously consider this approach. No need to solve a problem someone else already invested a lot of effort into solving and wrapping up in a nice, lightweight package. And installing multiple packages would let our team consider some A/B testing to see which package provided the best word suggestions. In a code challenge situation however, I thought writing the code myself would create more opportunities for discussion.
 
 #### _3. Write a Jaro Score algorithm myself in Java_
 
@@ -57,11 +61,11 @@ Writing the algorithm myself was a lot of fun and hopefully provides more to tal
 
 The key approach of the algorithm is to:
 
-1. Calculate the number of character matches, regardless of position within the allowed distance
+1. Calculate the number of character matches, regardless of position (_if_ within the allowed distance)
 1. Calculate the number of transpositions required to put all characters in correct position
 1. Input these in a formula to calculate a score between 0 (no match) and 1 (perfect match)
 
-After reading up on the key concepts, I was confident I could implement a working version in Java. Not all people seem to understand or explain the parts of the Jaro algorithm in the same way. For example, my calculation of transpositions is one of the simpler parts of my algorithm and might differ from how others do it. However, I'm happy with the resulting word suggestions I'm seeing, as well as the Jaro scores being calculated.
+After reading up on the key concepts, I was confident I could implement a working version in Java. Not all people seem to understand or explain the parts of the Jaro algorithm in the same way. For example, my calculation of transpositions is one of the simpler parts of my algorithm and might differ slightly from how others do it. But I'm happy with the resulting word suggestions I'm seeing, as well as the Jaro scores being calculated.
 
 ### Proper nouns
 
@@ -73,24 +77,23 @@ One interesting problem was how to handle proper nouns. The challenge prompt mer
 
 I assumed the text file to check would include natural (but sometimes misspelled) language about a variety of things and with just about any type of proper noun. Without advanced tools for identifying proper nouns, I was left with these observations:
 
-- Capitalized words are often proper nouns, but they could just be the first word of a sentence.
-- The first word of a sentence could be a proper noun or capitalized improper noun (or other).
-- A proper noun—or the first word in a sentence—might have been capitalized properly.
+- Capitalized words are often proper nouns, but they could also just be the first word of a sentence.
+- A proper noun—_or the first word in a sentence_—might not have been capitalized properly.
 - Proper nouns sometimes have corresponding lowercase spellings ("Chase" and "chase").
 
 #### _Addressing edge cases_
 
-The "Misspellings" section of the output outputs any lowercase word with no exact dictionary match, assuming it must be misspelled. The "Possible Misspellings" section displays words that are capitalized at the start of sentences and do not have an exact dictionary match. It ignores capitalized words mid-sentence, assuming they are correctly capitalized proper nouns (which we probably cannot verify with our given tool set), and it ignores sentence-starting words that _do_ have dictionary matches, assuming they are either non-proper nouns or at least correctly spelled proper nouns. But without an exhaustive lookup file of proper nouns, the choice seems to be between:
+The "Misspellings" section of the output outputs any lowercase word with no exact dictionary match, assuming it must be misspelled (which is probably fair, since forgetting to capitalize a proper noun could be considered a spelling mistake). The "Possible Misspellings" section displays words that are capitalized at the start of sentences and do not have an exact dictionary match. It ignores capitalized words mid-sentence, assuming they are correctly capitalized proper nouns (which we probably cannot verify without a lookup or LLM), and it ignores sentence-starting words that _do_ have dictionary matches, assuming they are either non-proper nouns or at least correctly spelled proper nouns. With the current tools, there is still a choice between:
 
 - _Ignoring_ mid-sentence capitalized words not in the dictionary, assuming they are properly spelled proper nouns,
 - _Flagging_ mid-sentence capitalized words not in the dictionary, assuming they are misspelled
 
-I decided to err on the side of not overwhelming the user with a ton of false positives (proper nouns that are in fact correctly spelled). With an imperfect system for identifying proper nouns in edge cases, I went with a solution that identifies words that are almost certainly misspelled while also allowing the user to double-check some edge cases where the program cannot reasonably know.
+I decided to err on the side of not overwhelming the user with a ton of false positives (proper nouns that fact correctly spelled but don't look like it based on our dictionary). With an imperfect system for identifying proper nouns in edge cases, I went with a solution that identifies words that are almost certainly misspelled while also allowing the user to double-check some edge cases where the program cannot reasonably know if it's a proper noun.
 
 - Mid-sentence capitalized words are assumed to be _correctly_ spelled proper nouns regardless of whether they have an exact dictionary match
-- Sentence-starting words are assumed to be _incorrectly_ spelled 
+- Sentence-starting words without an exact dictionary match are suggested as possibly _incorrect_ spellings
 
 ## Final Notes
 
-- This README has been spell-checked with the Voze Spell Checker
-- Thank you for considering me  :)
+- This README has been spell-checked with the Voze Spell Checker  :)
+- Finally, thank you for considering me!

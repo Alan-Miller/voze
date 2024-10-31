@@ -23,6 +23,5 @@
 hs_err_pid*
 replay_pid*
 
-file-to-check-backup.txt
 .DS_Store
 .vscode

@@ -22,7 +22,7 @@ class MainTest {
 
         String output = outputStream.toString();
         assert output.contains(
-                "Usage: java Main.java <dictionary_file_path> <file_to_check_path>");
+                "Usage: java src/main/java/Main.java <dictionary_file_path> <file_to_check_path>");
     }
 
     @Test

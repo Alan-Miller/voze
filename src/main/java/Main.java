@@ -8,7 +8,7 @@ public class Main {
             textFile.spellCheck();
         } else {
             System.out.println(
-                    "Usage: java Main.java <dictionary_file_path> <file_to_check_path>");
+                    "Usage: java src/main/java/Main.java <dictionary_file_path> <file_to_check_path>");
         }
 
     }
